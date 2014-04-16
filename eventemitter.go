@@ -23,6 +23,10 @@ func NewEventEmitter() (ee *EventEmitter) {
 	return
 }
 
+func (ee *EventEmitter) InitEventEmitter() {
+	ee.listeners = make(listenerType)
+}
+
 func getEventHandler(fn interface{}) (handler *eventHandler) {
 	fnValue := reflect.ValueOf(fn)
 	fnType := reflect.TypeOf(fn)
