@@ -1,4 +1,4 @@
-package engineio
+package events
 
 import (
     "container/list"
