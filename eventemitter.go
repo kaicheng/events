@@ -100,6 +100,10 @@ func (ee *EventEmitter) Emit(event string, args ...interface{}) {
 	}
 }
 
+// This implementation has a limit:
+// It only uses reflect.ValueOf(listener).Pointer() to determine the uniqueness
+// of a func, which is far from sufficient. This cannot handle func with a
+// receiver obj.method, nor func that is a func closure with different binds.
 func (ee *EventEmitter) RemoveListener(event string, listener interface{}) {
 	var e *list.Element
 	ee.lock.Lock()
