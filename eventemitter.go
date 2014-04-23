@@ -8,7 +8,6 @@ import (
 
 type listenerType map[string]*list.List
 type eventHandler struct {
-	raw  interface{}
 	fn   reflect.Value
 	args []reflect.Type
 	once bool
