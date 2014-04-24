@@ -13,6 +13,15 @@ type eventHandler struct {
 	once bool
 }
 
+type EventEmitterInt interface {
+	InitEventEmitter()
+	On(event string, listener interface{})
+	Once(event string, listener interface{})
+	Emit(event string, args ...interface{})
+	RemoveListener(event string, listener interface{})
+	RemoveAllListeners(evs ...string)
+}
+
 type EventEmitter struct {
 	lock      sync.RWMutex
 	listeners listenerType
