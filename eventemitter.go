@@ -80,6 +80,9 @@ func (ee *EventEmitter) Once(event string, listener interface{}) {
 }
 
 func tryCall(el *eventHandler, args []interface{}) {
+	defer func() {
+		recover()
+	}()
 	if len(args) == len(el.args) {
 		callArgs := make([]reflect.Value, len(args))
 		for i, arg := range args {
@@ -88,7 +91,7 @@ func tryCall(el *eventHandler, args []interface{}) {
 				return
 			}
 		}
-		go el.fn.Call(callArgs)
+		el.fn.Call(callArgs)
 	}
 }
 
@@ -117,7 +120,7 @@ func (ee *EventEmitter) RemoveListener(event string, listener interface{}) {
 	var e *list.Element
 	ee.lock.Lock()
 	defer func() {
-		recover()
+		// recover()
 		ee.lock.Unlock()
 	}()
 	ptr := reflect.ValueOf(listener).Pointer()
