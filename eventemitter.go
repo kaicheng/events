@@ -106,7 +106,9 @@ func (ee *EventEmitter) Emit(event string, args ...interface{}) {
 			if eh.once {
 				ls.Remove(l)
 			}
+			ee.lock.Unlock()
 			tryCall(eh, args)
+			ee.lock.Lock()
 			l = next
 		}
 	}
