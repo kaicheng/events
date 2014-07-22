@@ -14,7 +14,7 @@ func expect(t *testing.T, res bool, msgs ...interface{}) {
 
 func TestSimpleEvent(t *testing.T) {
 	msg := "simple message"
-	ee := NewEventEmitter()
+	ee := &EventEmitter{}
 	ee.On("message", func(msg string) {
 		t.Log("on:", msg)
 	})
@@ -24,7 +24,7 @@ func TestSimpleEvent(t *testing.T) {
 
 func TestInterfaceFn(t *testing.T) {
 	msg := "simple message"
-	ee := NewEventEmitter()
+	ee := &EventEmitter{}
 	ee.On("message", func(msg interface{}) {
 		t.Log("on:", msg)
 	})
@@ -34,7 +34,7 @@ func TestInterfaceFn(t *testing.T) {
 
 func TestMultiHandler(t *testing.T) {
 	msg := "simple message"
-	ee := NewEventEmitter()
+	ee := &EventEmitter{}
 	ee.On("message", func(msg string) {
 		t.Log("on (string):", msg)
 	})
@@ -54,7 +54,7 @@ func TestHandlerByType(t *testing.T) {
 	pos.x = 4.5
 	pos.y = 5.6
 
-	ee := NewEventEmitter()
+	ee := &EventEmitter{}
 	ee.On("message", func(msg string) {
 		t.Log("on (string):", msg)
 	})
@@ -75,7 +75,7 @@ func TestHandlerByNArgs(t *testing.T) {
 	pos.y = 5.6
 
 	what := "car"
-	ee := NewEventEmitter()
+	ee := &EventEmitter{}
 	ee.On("message", func(msg string) {
 		t.Log("on (string):", msg)
 	})
@@ -95,7 +95,7 @@ func TestHandlerByNArgs(t *testing.T) {
 }
 
 func TestOnce(t *testing.T) {
-	ee := NewEventEmitter()
+	ee := &EventEmitter{}
 
 	timesHelloEmitted := 0
 	ee.Once("hello", func(a, b string) {
@@ -132,7 +132,7 @@ func TestOnce(t *testing.T) {
 // Due to go concurrent feature, the ModifyInEmit test differs from
 // the original midify-in-emit test in node.js events pacakge.
 func TestModifiyInEmit(t *testing.T) {
-	e := NewEventEmitter()
+	e := &EventEmitter{}
 
 	var callback1, callback2, callback3 func()
 	callback1 = func() {

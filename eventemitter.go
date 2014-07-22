@@ -14,7 +14,6 @@ type eventHandler struct {
 }
 
 type EventEmitterInt interface {
-	InitEventEmitter()
 	On(event string, listener interface{})
 	Once(event string, listener interface{})
 	Emit(event string, args ...interface{})
@@ -25,16 +24,6 @@ type EventEmitterInt interface {
 type EventEmitter struct {
 	lock      sync.RWMutex
 	listeners listenerType
-}
-
-func NewEventEmitter() (ee *EventEmitter) {
-	ee = new(EventEmitter)
-	ee.listeners = make(listenerType)
-	return
-}
-
-func (ee *EventEmitter) InitEventEmitter() {
-	ee.listeners = make(listenerType)
 }
 
 func getEventHandler(fn interface{}, once bool) (handler *eventHandler) {
@@ -63,6 +52,9 @@ func (ee *EventEmitter) addListener(event string, listener interface{}, once boo
 	}
 	ee.lock.Lock()
 	defer ee.lock.Unlock()
+	if ee.listeners == nil {
+		ee.listeners = make(listenerType)
+	}
 	ls, found := ee.listeners[event]
 	if !found || ls == nil {
 		ls = list.New()
@@ -141,7 +133,9 @@ func (ee *EventEmitter) RemoveListener(event string, listener interface{}) {
 func (ee *EventEmitter) RemoveAllListeners(evs ...string) {
 	ee.lock.Lock()
 	defer ee.lock.Unlock()
-	for _, ev := range evs {
-		delete(ee.listeners, ev)
+	if ee.listeners != nil {
+		for _, ev := range evs {
+			delete(ee.listeners, ev)
+		}
 	}
 }
